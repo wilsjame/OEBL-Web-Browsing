@@ -4,18 +4,14 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 
 	"google.golang.org/appengine"
 )
 
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, r.URL.Path[1:])
+	})
 	appengine.Main() // Starts the server to receive requests.
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("index.html"))
-	t.Execute(w, nil)
 }
